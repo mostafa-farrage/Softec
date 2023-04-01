@@ -9,8 +9,7 @@ this task for Sofetic Company for Front End Developer that contain 3 pages:
 3- Order Details Page : a page with the order details (Order Details, Customer Details, products 
     details and quantity). <br />
 4 -  Add new order: show popup to choose from the products and add the order details (customer and payment method). <br />
-
-5 - Adding  HttpInterceptor handle the following 5 methods: 
+5 - Adding  HttpInterceptor handle the following 5 methods: <br />
       a. getOrders() <br />
       b. getOrder(orderId) <br />
       c. getProducts() <br />
