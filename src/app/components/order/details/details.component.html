@@ -1,0 +1,175 @@
+<!-- page -->
+<div class="page" *ngIf="page.isLoading ">
+  <!-- page header -->
+  <div class="page-header radius-8">
+    <!-- Breadcrumb -->
+    <div class="mt-2 mb-2">
+      <div class="d-flex  align-items-center">
+        <i class="uil uil-arrow-left me-2 font-18 pointer li-h1" [routerLink]="['/order']"></i>
+        <p class=" font-13 c-33">{{'order-details.title' | translate}}</p>
+      </div>
+    </div>
+    <!-- order info -->
+    <div class="row align-items-center">
+      <div class="col-12">
+        <div class="d-flex align-items-center">
+          <p class="font-16 me-1 py-1">Order No.</p>
+          <p class="font-24 c-0083 me-2 py-1 ">{{selectedOrder.OrderId}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- page content -->
+  <div class="col-12 col-md-8 mx-auto">
+    <div class="card p-3 mt-3">
+      <!-- task details -->
+      <div class="d-flex align-items-center mb-2 ">
+        <i class="uil uil-file-alt font-20 li-h1 c-008 me-2"></i>
+        <p class="card-title me-3">{{'order-details.title' | translate}}</p>
+      </div>
+      <!--hr-->
+      <hr class="m-0">
+      <div class="row pt-3">
+        <div class="col-12">
+          <!-- Performance -->
+          <div class="mb-3">
+            <!-- title -->
+
+            <div class="row">
+              <div class="col-12">
+                <div class="row  row-cols-lg-2 row-cols-1  gy-2 ">
+                  <!-- deliver time -->
+                  <div class="col">
+                    <div class="d-flex align-items-center">
+                      <div class="p-2 rect-40">
+                        <img src="/assets/img/clock_three.svg" class="w-100">
+                      </div>
+                      <div class="icon-detail">
+                        <p class="font-14 c-66 mb-1">Order Date</p>
+                        <p class="font-14 c-00f bold m-0">{{selectedOrder.OrderDate | date :'mediumTime'}}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="d-flex align-items-center">
+                      <div class="p-2 rect-40">
+                        <img src="/assets/img/payment.png" class="w-100">
+                      </div>
+                      <div class="icon-detail">
+                        <p class="font-14 c-66 mb-1">Payment Method</p>
+                        <p class="font-14 c-00f bold m-0">{{selectedOrder.PaymentType}}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr class="m-0">
+          <!--Customer Information-->
+          <div class="mb-3">
+            <!-- title -->
+            <h6 class=" font-16 bold mt-3">User Info </h6>
+            <div class="row row-cols-lg-3 row-cols-1  g-3 ">
+              <!-- Customer Mobile -->
+              <div class="col">
+                <div class="d-flex align-items-center">
+                  <div class="p-2 rect-40">
+                    <img src="/assets/img/man.svg" class="w-100">
+                  </div>
+                  <div class="icon-detail">
+                    <p class="font-12 c-66 mb-1 m-0">User Name</p>
+                    <p class="font-14 c-00f bold m-0">{{getUserByID(selectedOrder.UserId).Name}}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <div class="d-flex align-items-center">
+                  <div class="p-2 rect-40">
+                    <img src="/assets/img/customer-mobile.svg" class="w-100">
+                  </div>
+                  <div class="icon-detail">
+                    <p class="font-12 c-66 mb-1 m-0">User Mobile</p>
+                    <p class="font-14 c-00f bold m-0">{{getUserByID(selectedOrder.UserId).Phone}}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <div class="d-flex align-items-center">
+                  <div class="p-2 rect-40">
+                    <img src="/assets/img/email.png" class="w-100">
+                  </div>
+                  <div class="icon-detail">
+                    <p class="font-12 c-66 mb-1 m-0">User Email</p>
+                    <p class="font-14 c-00f bold m-0">{{getUserByID(selectedOrder.UserId).Email}}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <div class="d-flex align-items-center">
+                  <div class="p-2 rect-40">
+                    <img src="/assets/img/distance.svg" class="w-100">
+                  </div>
+                  <div class="icon-detail">
+                    <p class="font-12 c-66 mb-1 m-0">User Adress</p>
+                    <p class="font-14 c-00f bold m-0">{{getUserByID(selectedOrder.UserId).Address}}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- orders Products -->
+          <hr class="mt-0">
+          <h6 class=" font-16 bold mb-3">Order Products ({{selectedOrder.Products.length}} Products) </h6>
+
+          <div class="scolled h-100">
+            <table class="table">
+              <thead>
+                <tr class="th-header">
+                  <th>#</th>
+                  <ng-container *ngFor="let colum of page.columns ;let i=index;">
+                    <th [class.pointer]="colum.Sortable" (click)="onSortClicked(colum)">
+                      {{colum.Title | translate}}
+                      <div *ngIf="colum.Sortable" class="d-inline-block"
+                        [ngClass]="(isColumnAscending(colum.Name)!=null) ? 'arrow-sort' : ''">
+                        <i class="uil uil-sort sort-icon"
+                          [ngClass]="isColumnAscending(colum) ? 'sort-icon-ase' : 'sort-icon-des'"></i>
+                      </div>
+                    </th>
+                  </ng-container>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr [hidden]="page.isSearching || items.length>0">
+                  <td colspan="100%">
+                    <span>{{'shared.no-data-found'|translate}}</span>
+                  </td>
+                </tr>
+                <ng-container *ngFor="let item of selectedOrder.Products ;let i=index;">
+                  <tr >
+                    <td class="hidden-xs">{{i+1}}</td>
+                    <td>
+                      <div class="d-flex align-items-center"><img [src]="getProductByID(item.ProductId).ProductImg" class="rect-32 radius-8 me-3">
+                        <p [title]="item.ProductName">{{getProductByID(item.ProductId).ProductName|maxLengthDot:35}}</p>
+                      </div>
+                    </td>
+                    <td>{{getProductByID(item.ProductId).ProductPrice|price}}</td>
+                    <td>{{getProductByID(item.ProductId).AvailablePieces}}</td>
+                  </tr>
+                </ng-container>
+
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
