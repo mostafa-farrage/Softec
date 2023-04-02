@@ -1,0 +1,28 @@
+<div class="side-menu relative no-print" (mouseenter)="enterORLeaveSideMenu(true)"
+  (mouseleave)="enterORLeaveSideMenu(false)">
+  <a class="side-header d-flex">
+    <img src="/assets/icon/times.svg" class="rect-14 d-sm-none ms-auto" (click)="closeSideMenu()" />
+  </a>
+  <ul class="side-list d-flex flex-column accordion" id="accordionExample">
+    <li class="nav-item accordion-header first-level" id="headingProduct"
+      [ngClass]="{ active: getCurrentMoudleName() == '' }">
+      <a class="nav-link collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseheadingProduct"
+        aria-expanded="false" aria-controls="collapseheadingProduct" [routerLink]="['']">
+        <i class="uil uil-box"></i>
+        <p class="nav-content ">
+          {{'menu.product'|translate}}
+        </p>
+      </a>
+    </li>
+    <li class="nav-item accordion-header first-level" id="headingProduct"
+      [ngClass]="{ active: getCurrentMoudleName() == 'order' }">
+      <a class="nav-link collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseheadingProduct"
+        aria-expanded="false" aria-controls="collapseheadingProduct" [routerLink]="['/order']">
+        <i class="uil uil-box"></i>
+        <p class="nav-content ">
+          {{'menu.order'|translate}}
+        </p>
+      </a>
+    </li>
+  </ul>
+</div>

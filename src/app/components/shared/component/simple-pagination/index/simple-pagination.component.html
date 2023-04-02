@@ -1,0 +1,24 @@
+<div class="simple-pagination">
+  <div class="items-length">
+    <strong>
+      {{ spOptions?.viewItemsCountStart || 0 }}-{{ spOptions?.viewItemsCountEnd || 0 }}
+      of
+      {{ spOptions?.totalItems || 0 }}
+      Items
+    </strong>
+  </div>
+  <ul class="navigation">
+    <li>
+      <button [class.disabled]="!spOptions?.hasPrevPage" [disabled]="!spOptions?.hasPrevPage"
+        [title]="'custom-elements.simple-pagination.prev'" (click)="getPrevPage()">
+        <i class="uil uil-angle-left" aria-hidden="true"></i>
+      </button>
+    </li>
+    <li>
+      <button [class.disabled]="!spOptions?.hasNextPage" [disabled]="!spOptions?.hasNextPage"
+        [title]="'custom-elements.simple-pagination.next'" (click)="getNextPage()">
+        <i class="uil uil-angle-right" aria-hidden="true"></i>
+      </button>
+    </li>
+  </ul>
+</div>

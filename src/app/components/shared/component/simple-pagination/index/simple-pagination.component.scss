@@ -1,0 +1,50 @@
+@import "../../../../../../styles/helpers/variables";
+@import "../../../../../../styles/helpers/mixins";
+@import "../../../../../../styles/components/components";
+
+.simple-pagination {
+  @include flexbox(flex, "", center, between, "", "");
+
+  .items-length {
+    strong {
+      font-size: 12px;
+    }
+  }
+
+  .navigation {
+    @include flexbox(flex, "", center, center, "", "");
+    margin-bottom: 0 !important;
+    li {
+      margin-inline-end: 16px;
+      button {
+        @include flexbox(flex, "", center, center, "", "");
+        height: 36px;
+        width: 36px;
+        background-color: #E6E8EA;
+        border: 0;
+        border-radius: 10px;
+        box-shadow: 0 0 20px 0px rgba(40, 47, 58, 0.1);
+
+        .uil {
+          font-size: 16px;
+          font-weight: bold;
+          @include appDir(transform, unset, transform, rotateY(180deg));
+        }
+
+        &.disabled {
+          color: darken($backgroundColor-darker, 4);
+          cursor: not-allowed;
+        }
+
+        &:not(.disabled):hover {
+          background-color: #0F61FD;
+          color: #fff;
+        }
+      }
+
+      &:not(:last-of-type) {
+        @include appDir(margin-right, 10px, margin-left, 10px);
+      }
+    }
+  }
+}
