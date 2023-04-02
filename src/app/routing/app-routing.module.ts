@@ -1,8 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LayoutComponent } from '../components/shared/layout/layout.component';
-import { RoleEnum } from '../enum/role.enum';
-import { AuthGuardService } from '../guards/auth-guard.service ';
+
 
 const routes: Routes = [
   {
@@ -21,7 +20,7 @@ const routes: Routes = [
   
 ];
 
-@NgModule({
+ @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
