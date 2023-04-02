@@ -1,0 +1,71 @@
+<div class="page">
+  <div class="h-100" *ngIf="!page.isPageLoaded">
+    <loading title="{{'shared.loading'|translate}}" [inline]="false"></loading>
+  </div>
+  <div class="page-content" *ngIf="page.isPageLoaded">
+    <div class="card h-100">
+      <div class="card-header">
+        <div class="title d-flex align-items-center w-100">
+          <p class="font-20 bold">{{'order.title'|translate}}</p>
+        </div>
+      </div>
+      <div class="card-content">
+        <div class="scolled h-100">
+          <table class="table">
+            <thead>
+              <tr class="th-header">
+                <th>#</th>
+                <ng-container *ngFor="let colum of page.columns ;let i=index;">
+                  <th [class.pointer]="colum.Sortable" (click)="onSortClicked(colum)">
+                    {{colum.Title | translate}}
+                    <div *ngIf="colum.Sortable" class="d-inline-block"
+                      [ngClass]="(isColumnAscending(colum.Name)!=null) ? 'arrow-sort' : ''">
+                      <i class="uil uil-sort sort-icon"
+                        [ngClass]="isColumnAscending(colum) ? 'sort-icon-ase' : 'sort-icon-des'"></i>
+                    </div>
+                  </th>
+                </ng-container>
+              </tr>
+            </thead>
+            <tbody>
+              <tr [hidden]="page.isSearching || items.length>0">
+                <td colspan="100%">
+                  <span>{{'shared.no-data-found'|translate}}</span>
+                </td>
+              </tr>
+              <ng-container *ngFor="let item of simplePaginationSer.spOptions.pagedData; trackBy: track ;let i=index;">
+                <tr >
+                  <td class="hidden-xs">{{i+1}}</td>
+                  <td> <a routerLink="/order/{{item.OrderId}}">
+                    {{item.OrderId}}</a>
+                  </td>
+                  <td>{{item.PaymentType}}</td>
+                  <td>{{getTotalPrice(item.Products) | price}}</td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+          <div class="mt-auto">
+            <app-simple-pagination (callPrev)="getPrevPage()" (callNext)="getNextPage()"
+              [spOptions]="simplePaginationSer.spOptions"></app-simple-pagination>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #deleteTemplate>
+  <div class="modal-content confirm-modal">
+    <div class="modal-body">
+      <p class="modal-title font-16 bold c-00f">{{'product.delete-product'|translate}}</p>
+      <p class="modal-confirm-content mb-2">{{'shared.delete-confirmation.message'|translate}} </p>
+      <div class="d-flex mt-4">
+        <button type="button" class="btn cancel-btn me-auto"
+          (click)="modalRef.hide()">{{'shared.cancel'|translate}}</button>
+        <button type="button" [disabled]="page.isSaving" class="btn btn-without-icon bg-e5 ms-2"
+          (click)="removeProduct()">{{'shared.confirm'|translate}}</button>
+      </div>
+    </div>
+  </div>
+</ng-template>
