@@ -1,0 +1,195 @@
+<div class="page">
+  <div class="h-100" *ngIf="!page.isPageLoaded">
+    <loading title="{{'shared.loading'|translate}}" [inline]="false"></loading>
+  </div>
+  <div class="page-content" *ngIf="page.isPageLoaded">
+    <div class="card h-100">
+      <div class="card-header">
+        <div class="title d-flex align-items-center w-100">
+          <p class="font-20 bold">{{'product.title'|translate}}</p>
+          <div class="d-flex align-items-center ms-auto">
+            <button class="rb-btn rb-btn-primary rb-btn-sm me-2" (click)="showCreateOrderTamplet()">
+              <i class="uil uil-plus c-white"></i>
+              <span class="rb-btn-text">Create Order</span>
+            </button>
+            <button class="rb-btn rb-btn-primary rb-btn-sm" (click)="showCreateOrEditTamplete()">
+              <i class="uil uil-plus c-white"></i>
+              <span class="rb-btn-text">Create Product</span>
+            </button>
+          </div>
+
+        </div>
+      </div>
+      <div class="card-content">
+        <div class="scolled h-100">
+          <table class="table">
+            <thead>
+              <tr class="th-header">
+                <th>#</th>
+                <ng-container *ngFor="let colum of page.columns ;let i=index;">
+                  <th [class.pointer]="colum.Sortable" (click)="onSortClicked(colum)">
+                    {{colum.Title | translate}}
+                    <div *ngIf="colum.Sortable" class="d-inline-block"
+                      [ngClass]="(isColumnAscending(colum.Name)!=null) ? 'arrow-sort' : ''">
+                      <i class="uil uil-sort sort-icon"
+                        [ngClass]="isColumnAscending(colum) ? 'sort-icon-ase' : 'sort-icon-des'"></i>
+                    </div>
+                  </th>
+                </ng-container>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr [hidden]="page.isSearching || products.length>0">
+                <td colspan="100%">
+                  <span>{{'shared.no-data-found'|translate}}</span>
+                </td>
+              </tr>
+              <ng-container *ngFor="let item of products ;let i=index;">
+                <tr [class.bg-blue-d7]="isProductHaveAfewQuantities(item)">
+                  <td class="hidden-xs">{{i+1}}</td>
+                  <td>
+                    <div class="d-flex align-items-center"><img [src]="item.ProductImg" class="rect-32 radius-8 me-3">
+                      <p [title]="item.ProductName">{{item.ProductName|maxLengthDot:35}}</p>
+                    </div>
+                  </td>
+                  <td>{{item.ProductPrice|price}}</td>
+                  <td>{{item.AvailablePieces}}</td>
+                  <td>
+                    <div class="pointer dropdown text-end">
+                      <button id="dropdownMenuID" data-bs-toggle="dropdown" aria-expanded="false"
+                        class="rb-btn rb-btn-secondary rb-btn-sm ms-auto"><i
+                          class="uil uil-ellipsis-v mx-n1"></i></button>
+                      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuID">
+                        <li role="button" (click)="showCreateOrEditTamplete(item)">
+                          <a class="dropdown-item d-flex">
+                            <i class="uil uil-edit font-14 bold me-2"></i>
+                            <p>{{'shared.edit'| translate}}</p>
+                          </a>
+                        </li>
+                        <li role="button">
+                          <a class="dropdown-item d-flex" (click)="showDeleteConfirmation(item)">
+                            <i class="uil uil-trash-alt font-14 bold me-2"></i>
+                            <p>{{'shared.delete'| translate}}</p>
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                  </td>
+                </tr>
+              </ng-container>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #deleteTemplate>
+  <div class="modal-content confirm-modal">
+    <div class="modal-body">
+      <p class="modal-title font-16 bold c-00f">{{'product.delete-product'|translate}}</p>
+      <p class="modal-confirm-content mb-2">{{'shared.delete-confirmation.message'|translate}} </p>
+      <div class="d-flex mt-4">
+        <button type="button" class="btn cancel-btn me-auto"
+          (click)="modalRef.hide()">{{'shared.cancel'|translate}}</button>
+        <button type="button" [disabled]="page.isSaving" class="btn btn-without-icon bg-e5 ms-2"
+          (click)="removeProduct()">{{'shared.confirm'|translate}}</button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+
+<ng-template #createOrEditProductTemplate>
+  <div class="modal-body p-0">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{this.selectedItem.ProductId ? "Update Product" : "Create Product"}}</h5>
+        <i class="uil uil-times c-g600 font-16 pointer ms-auto" (click)="modalRef.hide()"></i>
+      </div>
+      <div class="modal-body p-2">
+        <form class="form" [formGroup]="pageCreate.form">
+          <div class="form-body">
+            <div class="row row-cols-1 mx-0 g-2 ">
+              <div class="col">
+                <ng-control [form]="pageCreate.form" control="ProductName" label="Product Name"
+                  placeholder="Enter Product Name">
+                </ng-control>
+              </div>
+              <div class="col">
+                <ng-control [type]="page.ControlType.INPUT_NUMBER" [form]="pageCreate.form" control="ProductPrice"
+                  label="Product Price" placeholder="Enter Product Price">
+                </ng-control>
+              </div>
+              <div class="col">
+                <ng-control [form]="pageCreate.form" [type]="page.ControlType.INPUT_NUMBER" control="AvailablePieces"
+                  label="Available Pieces" placeholder="Enter Available Pieces">
+                </ng-control>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn cancel-btn me-auto"
+          (click)="modalRef.hide()">{{'shared.cancel'|translate}}</button>
+        <button type="button" class="rb-btn rb-btn-primary rb-btn-sm" (click)='modalRef.hide();createOrEditProduct()'
+          [disabled]="disabledSummitProduct()">{{(this.selectedItem.ProductId ? 'shared.update': 'shared.save') | translate
+          }}</button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+
+<ng-template #createOrderTemplate>
+  <div class="modal-body p-0">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Create Order</h5>
+        <i class="uil uil-times c-g600 font-16 pointer ms-auto" (click)="modalRef.hide()"></i>
+      </div>
+      <div class="modal-body p-2">
+        <form class="form" [formGroup]="pageCreate.form">
+          <div class="form-body">
+            <div class="row row-cols-1 row-cols-md-2 mx-0 g-2 ">
+              <div class="col">
+                <ng-control [form]="pageCreate.form" control="CustomerName" label="Customer Name"
+                  placeholder="Enter Customer Name">
+                </ng-control>
+              </div>
+              <div class="col">
+                <ng-control [form]="pageCreate.form" control="PaymentType" label="Payment Type"
+                  placeholder="Enter Payment Type">
+                </ng-control>
+              </div>
+            </div>
+            <hr>
+            <p class="font-20 bold"> Select Products </p>
+            <div class="row row-cols-1 row-cols-md-2 mx-0 g-2 mt-3">
+              <ng-container *ngFor="let item of products">
+                <div class="col">
+                  <div class="product-container" (click)="item.isSelected = !item.isSelected"
+                    [class.selected]="item.isSelected"><img [src]="item.ProductImg" class="rect-32 radius-8 me-3">
+                    <p [title]="item.ProductName">{{item.ProductName|maxLengthDot:35}}</p>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn cancel-btn me-auto"
+          (click)="modalRef.hide()">{{'shared.cancel'|translate}}</button>
+        <button type="button" class="rb-btn rb-btn-primary rb-btn-sm" (click)='modalRef.hide();createOrEditProduct()'
+          [disabled]="disabledSummitOrder()">{{'shared.save' | translate
+          }}</button>
+      </div>
+    </div>
+  </div>
+</ng-template>

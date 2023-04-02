@@ -8,10 +8,10 @@ const routes: Routes = [
   {
     path: '', component: LayoutComponent,
     children: [
-      // {
-      //   path: '',
-      //   loadChildren: () => import('../components/product/product.module').then(m => m.ProductModule),
-      // },
+      {
+        path: '',
+        loadChildren: () => import('../components/product/product.module').then(m => m.ProductModule),
+      },
       // {
       //   path: 'order',
       //   loadChildren: () => import('../components/order/order.module').then(m => m.OrderModule),
