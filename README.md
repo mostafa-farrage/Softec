@@ -7,7 +7,7 @@ this task for Sofetic Company for Front End Developer that contain 3 pages:
 2- Orders Page: a page that show all the orders added in the system and the total price for each 
    order and payment Method. <br />
 3- Order Details Page : a page with the order details (Order Details, Customer Details, products 
-    details and quantity). <br />
+    details and quantity) that you can go to it by click in ID in Order Index. <br />
  
  and also contain  <br />
 4 -  Add new order: show popup to choose from the products and add the order details (customer and payment method). <br />
